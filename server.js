@@ -2,7 +2,7 @@ import { configDotenv } from "dotenv"
 configDotenv()
 
 import express from "express"
-import { errorHandler } from "./middlewares/errorMiddleware.js"
+import { errorHandler } from "./middlewares/error.middleware.js"
 import productRoutes from "./routes/productRoutes.js"
 import connectDB from "./config/db.js"
 
