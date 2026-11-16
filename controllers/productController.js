@@ -162,4 +162,108 @@ const addProducts = async (req, res, next) => {
     
 }
 
-export { displayProducts, addProducts, getProducts };
+
+const getProductByName = async (req, res, next) => {
+    try {
+        const { name } = req.params;
+
+        if (!name?.trim()) {
+            return res.status(400).json({
+                message: "Please provide a product name"
+            });
+        }
+
+        const escapedName = name.trim().replace(
+            /[.*+?^${}()|[\]\\]/g,
+            "\\$&"
+        );
+
+        const result = await Product.find({
+            name: {
+                $regex: escapedName,
+                $options: "i"
+            }
+        });
+
+        if (result.length === 0) {
+            return res.status(404).json({
+                message: "Product not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Products found successfully",
+            result
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+const getProductByNameOrCategory = async (req, res, next) => {
+    try {
+        const { name, category } = req.query
+        if (!name?.trim() && !category?.trim()) {
+            return res.status(400).json({
+                message: "Please provide a name or category"
+            });
+        }
+        const queryParameters = {}
+        if (name?.trim()) {
+            const escapedName = name.trim().replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+            )
+
+            queryParameters.name = {
+                $regex: escapedName,
+                $options: "i"
+            };
+        }
+
+        if (category?.trim()) {
+            const escapedName = category.trim().replace(
+                /[.*+?^${}()|[\]\\]/g,
+                "\\$&"
+            )
+
+            queryParameters.category = {
+                $regex : escapedName,
+                $options : "i"
+            }
+        }
+
+        const result = await Product.find(queryParameters)
+        if (result.length === 0) {
+            return res.status(404).json({
+                message : "product not found"
+            }) 
+        }
+        res.status(200).json({
+            message : "Product/s found successfully",
+            result
+        })
+    } catch (error) {
+        next(error)
+    }
+    
+}
+
+const editProductByPut = async (req, res, next) => {
+    try {
+        
+    } catch (error) {
+        next(error)
+    }
+    
+}
+
+export { 
+    displayProducts, 
+    addProducts, 
+    getProducts, 
+    getProductByName,
+    getProductByNameOrCategory 
+};
