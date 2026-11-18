@@ -251,8 +251,50 @@ const getProductByNameOrCategory = async (req, res, next) => {
     
 }
 
-const editProductByPut = async (req, res, next) => {
+const editProduct = async (req, res, next) => {
     try {
+        const { id } = req.params
+        const allowedFields = [
+            "name",
+            "description",
+            "price",
+            "stock",
+            "images"
+        ]
+        
+        const updates = {}
+
+        for (const field of allowedFields) {
+            if(req.body[field] !== undefined) {
+                updates[field] = req.body[field]
+            }
+        }
+
+        if (updates.length === 0) {
+            return res.status(400).json({
+                message : "please provide aleast one valid field"
+            })
+        }
+
+        const result = await Product.findByIdAndUpdate(
+            { _id : id },
+            { $set : updates},
+            {
+                new : true,
+                runValidators : true
+            }
+        )
+
+        if (!result) {
+            return res.status(404).json({
+                message : "product not found"
+            })
+        }
+
+        res.status(200).json({
+            message : "product updated successfully",
+            result : result
+        })
         
     } catch (error) {
         next(error)
@@ -260,10 +302,33 @@ const editProductByPut = async (req, res, next) => {
     
 }
 
+const deleteProduct = async (req, res, next) => {
+    try {
+        const { id } = req.params
+
+        const result = await Product.findByIdAndDelete(id)
+
+        if (!result) {
+            return res.status(404).json({
+                messasge : "product not found"
+            })    
+        }
+
+        res.status(200).json({
+            message : "Product deleted successfully",
+            deletedItem : result
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
 export { 
     displayProducts, 
     addProducts, 
     getProducts, 
     getProductByName,
-    getProductByNameOrCategory 
+    getProductByNameOrCategory,
+    editProduct,
+    deleteProduct
 };
