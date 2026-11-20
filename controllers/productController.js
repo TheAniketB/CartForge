@@ -1,4 +1,3 @@
-
 import Product from "../models/product.model.js";
 
 const displayProducts = async (req, res, next) => {

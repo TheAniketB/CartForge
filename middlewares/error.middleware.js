@@ -3,6 +3,8 @@ export const errorHandler = (error, req, res, next) => {
         return next(error)
     }
     console.log(error)
+    // console.log(error.email.ValidatorError);
+    
 
     if (error.code === 11000) {
         const field = Object.keys(error.keyValue)[0];
