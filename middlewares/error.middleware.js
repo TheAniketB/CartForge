@@ -16,7 +16,11 @@ export const errorHandler = (error, req, res, next) => {
         });
     }
 
-    res.status(500).json({
-        message : "Internal Server Error"
+    
+    console.error("error in creating order: ", error);
+    res.status(error.statusCode || 500).json({
+        message : error.statusCode
+        ? error.message
+        : "Internal Server Error"
     })
 }

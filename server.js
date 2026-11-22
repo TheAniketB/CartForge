@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/error.middleware.js"
 
 import productRoutes from "./routes/productRoutes.js"
 import userRoutes from "./routes/userRoutes.js"
+import orderRoutes from "./routes/orderRoutes.js"
 
 import connectDB from "./config/db.js"
 
@@ -17,6 +18,7 @@ app.use(express.json())
 
 app.use("/products", productRoutes)
 app.use("/users", userRoutes)
+app.use("/orders", orderRoutes)
 
 
 app.use(errorHandler)
