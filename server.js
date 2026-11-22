@@ -3,7 +3,10 @@ configDotenv()
 
 import express from "express"
 import { errorHandler } from "./middlewares/error.middleware.js"
+
 import productRoutes from "./routes/productRoutes.js"
+import userRoutes from "./routes/userRoutes.js"
+
 import connectDB from "./config/db.js"
 
 
@@ -13,6 +16,7 @@ app.use(express.json())
 
 
 app.use("/products", productRoutes)
+app.use("/users", userRoutes)
 
 
 app.use(errorHandler)
