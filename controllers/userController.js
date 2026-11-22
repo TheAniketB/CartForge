@@ -98,4 +98,19 @@ const myProfile = async (req, res, next) => {
     }
 }
 
-export { register, login, myProfile }
+const allUsers = async (req, res, next) => {
+    try {
+
+        const allUsers = await User.find()
+        const totalUser = await User.countDocuments()
+        
+        return res.status(200).json({
+            totalUser : totalUser,
+            allUsers
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export { register, login, myProfile, allUsers }
